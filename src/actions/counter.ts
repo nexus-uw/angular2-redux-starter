@@ -32,3 +32,4 @@ export function incrementAsync(delay = 1000) {
     }, delay);
   };
 }
+
