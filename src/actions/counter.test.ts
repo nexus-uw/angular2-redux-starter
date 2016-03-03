@@ -1,63 +1,63 @@
-import {mockStore} from '../tests.helpers';
-import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './counter';
-import * as CounterActions from './counter';
+// import {mockStore} from '../tests.helpers';
+// import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './counter';
+// import * as CounterActions from './counter';
 
-describe('counter action creators', () => {
+// describe('counter action creators', () => {
 
-  it('increment should create INCREMENT_COUNTER action', () => {
-    chai.expect(CounterActions.increment())
-      .to.deep.equal({
-        type: INCREMENT_COUNTER
-      });
-  });
+//   it('increment should create INCREMENT_COUNTER action', () => {
+//     chai.expect(CounterActions.increment())
+//       .to.deep.equal({
+//         type: INCREMENT_COUNTER
+//       });
+//   });
 
-  it('decrement should create DECREMENT_COUNTER action', () => {
-    chai.expect(CounterActions.decrement())
-      .to.deep.equal({
-        type: DECREMENT_COUNTER
-      });
-  });
+//   it('decrement should create DECREMENT_COUNTER action', () => {
+//     chai.expect(CounterActions.decrement())
+//       .to.deep.equal({
+//         type: DECREMENT_COUNTER
+//       });
+//   });
 
-  it('incrementIfOdd should dispatch INCREMENT_COUNTER if counter is odd', 
-    (done) => {
+//   it('incrementIfOdd should dispatch INCREMENT_COUNTER if counter is odd',
+//     (done) => {
 
-    const expectedAction = { type: INCREMENT_COUNTER };
+//     const expectedAction = { type: INCREMENT_COUNTER };
 
-    const store = mockStore({
-      getState: () => {
-        return { 
-          counter: 1
-        };
-      },
-      dispatch: (action) => {
-        chai.expect(action)
-          .to.deep.equal(expectedAction);
+//     const store = mockStore({
+//       getState: () => {
+//         return {
+//           counter: 1
+//         };
+//       },
+//       dispatch: (action) => {
+//         chai.expect(action)
+//           .to.deep.equal(expectedAction);
 
-        done();
-      }
-    });
-    
-    store.dispatch(CounterActions.incrementIfOdd());
-  });
+//         done();
+//       }
+//     });
 
-  it('incrementAsync should dispatch INCREMENT_COUNTER after given delay',
-    (done) => {
-    const expectedAction = { type: INCREMENT_COUNTER };
+//     store.dispatch(CounterActions.incrementIfOdd());
+//   });
 
-    const store = mockStore({
-      getState: () => {
-        return { 
-          counter: 0 
-        };
-      },
-      dispatch: (action) => {
-        chai.expect(action)
-          .to.deep.equal(expectedAction);
+//   it('incrementAsync should dispatch INCREMENT_COUNTER after given delay',
+//     (done) => {
+//     const expectedAction = { type: INCREMENT_COUNTER };
 
-        done();
-      }
-    });
+//     const store = mockStore({
+//       getState: () => {
+//         return {
+//           counter: 0
+//         };
+//       },
+//       dispatch: (action) => {
+//         chai.expect(action)
+//           .to.deep.equal(expectedAction);
 
-    store.dispatch(CounterActions.incrementAsync(100));
-  });
-});
+//         done();
+//       }
+//     });
+
+//     store.dispatch(CounterActions.incrementAsync(100));
+//   });
+// });

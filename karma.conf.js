@@ -3,9 +3,10 @@
 module.exports = function (config) {
   config.set({
     frameworks: [
-      'mocha',
+    //  'mocha',
       'chai',
-      'sinon'
+      'sinon',
+      'jasmine'
     ],
 
     files: [
@@ -13,14 +14,15 @@ module.exports = function (config) {
     ],
 
     plugins: [
-      require('karma-mocha'),
+    //  require('karma-mocha'),
       require('karma-chai'),
       require('karma-sinon'),
       require('karma-chrome-launcher'),
       require('karma-webpack'),
       require('karma-sourcemap-loader'),
       require('karma-mocha-reporter'),
-      require('karma-coverage')
+      require('karma-coverage'),
+      require('karma-jasmine')
     ],
 
     preprocessors: {

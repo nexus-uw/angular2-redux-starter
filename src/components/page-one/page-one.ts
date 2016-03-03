@@ -1,9 +1,7 @@
 import {Component, View, Inject, OnDestroy, OnInit} from 'angular2/core';
-import {Http, RequestOptionsArgs, URLSearchParams} from 'angular2/http';
 import {Router} from 'angular2/router';
-import {bindActionCreators} from 'redux';
 
-import {setAPIRandomNumber} from '../../actions/random';
+import RandomActions from '../../actions/random';
 @Component({
   selector: 'pageOne'
 })
@@ -23,49 +21,35 @@ export class PageOne {
   public apiRandomNumber: number;
   protected unsubscribe: Function;
   protected setAPIRandomNumber: Function;
-  public apiError:any;
+  public apiError: string;
   /**
    * @param  {Http} privatehttp
    * @param  {Router} privaterouter
    */
-  constructor(private http: Http, private router: Router, @Inject('ngRedux') private ngRedux) {
+  constructor(private router: Router, @Inject('ngRedux') private ngRedux, private RandomActions: RandomActions) {
   }
 
   ngOnInit() {
-
     this.unsubscribe = this.ngRedux.connect(
-      null,
+      this.mapStateToThis,
       this.mapDispatchToThis)(this);
   }
 
-  mapDispatchToThis(dispatch) {
-    return bindActionCreators({ setAPIRandomNumber: setAPIRandomNumber }, dispatch);
-  }
+  private mapStateToThis (state) {
+    return {
+      apiRandomNumber : state.random.apiRandomNumber
+    };
+  };
 
-
-  /**
-   */
-  public getRandomApiNumber() {
-    const BASE = 10;
-    const searchParams = new URLSearchParams();
-    searchParams.set('num', '1');
-    searchParams.set('base', BASE.toString());
-    searchParams.set('format', 'plain');
-    searchParams.set('min', '1');
-    searchParams.set('max', '100000000');
-    searchParams.set('col', '1');
-
-    this.http.get('https://www.random.org/integers/', { search: searchParams })
-      .subscribe(
-      (data) => {this.apiRandomNumber = parseInt(data.text(), BASE); this.apiError = null; },
-      (err) => console.error('API ERROR', err)
-      );
-  }
+  // needs to be an arrow function so that 'this' is the PageOne Class
+  private mapDispatchToThis = (dispatch: Function) => {
+    // dont use redux magic bind for async actions
+    return {getRandomApiNumber : () => this.RandomActions.getRandomApiNumber(dispatch)};
+  };
 
   /**
    */
   public goToNextPage() {
-    this.setAPIRandomNumber(this.apiRandomNumber);
     return this.router.navigate(['/PageTwo']);
   };
 }

@@ -1,3 +1,4 @@
+
 import {applyMiddleware, compose, createStore} from 'redux';
 import reducer from './reducers/index';
 const thunk = require('redux-thunk');

@@ -8,9 +8,9 @@ import {RouteParams, Router} from 'angular2/router';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {FormBuilder, Validators, ControlGroup} from 'angular2/common';
 
-import {bindActionCreators} from 'redux';
+//import {bindActionCreators} from 'redux';
 
-import {setCombinedRandomSeed} from '../../actions/random';
+import RandomActions from '../../actions/random';
 
 
 @Component({
@@ -30,24 +30,25 @@ import {setCombinedRandomSeed} from '../../actions/random';
       </ul>
     </div>
 
-    <p> Current Random Number {{newValue}}</p>
+    <p> Current Random Number {{combinedSeed}}</p>
 
-    <button type="submit" [disabled]="!group.valid">Register</button>
+    <button type="submit" [disabled]="!group.valid || calculatingPassword">Register</button>
 
   </form>
   `
 })
 export class PageTwo {
-  public loading: boolean;
+  public calculatingPassword: boolean;
   public newValue: number;
   private group: ControlGroup;
   protected unsubscribe: Function;
-  protected setCombinedRandomSeed : Function;
+  protected makeRandomNumberMoreRandom : Function;
   private apiRandomNumber: number;
-
+protected getPassword: Function;
   constructor(private params: RouteParams,
-   builder: FormBuilder,
+   private builder: FormBuilder,
    private router: Router,
+   private RandomActions: RandomActions,
     @Inject('ngRedux') private ngRedux) {
 
 
@@ -59,9 +60,8 @@ export class PageTwo {
     ]});
 
     this.group.find('random').valueChanges.subscribe((value: string) => {
-      this.newValue = this.apiRandomNumber
-      * Math.random()
-      * parseInt(value ? value.toLowerCase() : Math.random().toString(), 32);
+      this.makeRandomNumberMoreRandom(value);
+      this.getPassword();
     });
   }
 
@@ -71,23 +71,29 @@ export class PageTwo {
       this.mapDispatchToThis)(this);
 
       if (!this.apiRandomNumber) {
-        console.debug('SHould goback to first page to get rando number')
         return this.router.navigate(['/PageOne']);
       }
   }
   mapStateToThis (state) {
     return {
-      apiRandomNumber : state.random.apiRandomNumber
+      apiRandomNumber : state.random.apiRandomNumber,
+      combinedSeed : state.random.combinedSeed,
+      calculatingPassword: state.random.calculatingPassword
     };
   }
-  mapDispatchToThis(dispatch) {
-    return bindActionCreators({
-      setCombinedRandomSeed : setCombinedRandomSeed
-     }, dispatch);
+  mapDispatchToThis = (dispatch) => {
+    return {
+      makeRandomNumberMoreRandom : (value) => {
+        dispatch(this.RandomActions.makeRandomNumberMoreRandom(this.apiRandomNumber, value));
+      },
+      getPassword : () => {
+        this.RandomActions.getPassword(this.apiRandomNumber, dispatch);
+      }
+    };
   }
 
   public onSubmit() {
-    this.setCombinedRandomSeed(this.group.find('random').value);
+
     return this.router.navigate(['/Final']);
   }
 }

@@ -31,38 +31,19 @@ export class Final {
 
     this.unsubscribe = this.ngRedux.connect(
       this.mapStateToThis)(this);
-    if (!this.combinedSeed) {
+    if (!this.password) {
       this.router.navigate(['/PageOne']);
-    } else {
-      this.doStuff();
     }
   }
 
   mapStateToThis(state) {
     return {
-      combinedSeed: state.random.combinedSeed
-      // todo map the rando number this
+      password: state.random.password
     };
   }
 
 
-  doStuff() {
-    const searchParams = new URLSearchParams()
-    searchParams.set('num', '5');
-    searchParams.set('format', 'plain');
-    searchParams.set('len', '4');
-    searchParams.set('unique', 'on');
-    searchParams.set('upperalpha', 'on');
-    searchParams.set('loweralpha', 'on');
-    searchParams.set('digits', 'on');
-    searchParams.set('rnd', this.combinedSeed.toString());
-    searchParams.set('col', '1');
 
-    this.http.get('https://www.random.org/strings/', { search: searchParams })
-      .subscribe(
-      (data) => this.password = data.text().replace('\n', '')
-      );
-  }
 
 
 }

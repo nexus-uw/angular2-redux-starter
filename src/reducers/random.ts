@@ -1,4 +1,4 @@
-import { GET_RANDOM_ARI_NUMBER, SET_API_RANDOM_NUMER, SET_COMBINED_RANDOM_SEED } from '../actions/random';
+import { GET_RANDOM_ARI_NUMBER, SET_API_RANDOM_NUMER, SET_COMBINED_RANDOM_SEED, SET_PASSWORD, START_CALCULATING_PASSWORD } from '../actions/random';
 
 export default function random(state = {
   apiRandomNumber: NaN,
@@ -16,8 +16,15 @@ export default function random(state = {
       return Object.assign({}, state, {
         combinedSeed: action.combinedSeed
       });
-    // case GET_RANDOM_ARI_NUMBER:
-
+    case SET_PASSWORD:
+      return Object.assign({}, state, {
+        password: action.password,
+        calculatingPassword : false
+      });
+    case START_CALCULATING_PASSWORD:
+      return Object.assign({}, state, {
+        calculatingPassword: true
+      });
     // return;
     default:
       return state;
